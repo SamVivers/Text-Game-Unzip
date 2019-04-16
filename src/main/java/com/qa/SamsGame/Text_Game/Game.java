@@ -4,26 +4,27 @@ import java.util.Scanner;
 
 public class Game {
 	
-	private int xP;
-	private int yP;
-	private int xT;
-	private int yT;
+	private static int xP;
+	private static int yP;
+	private static int xT;
+	private static int yT;
 
 	public void spawnP() {
 		xP = (int)(Math.random() * 20);
 		yP = (int)(Math.random() * 20);
+		while (xP == xT && yP == yT) {
+			xP = (int)(Math.random() * 20);
+			yP = (int)(Math.random() * 20);
+		}
 	}
 	public void spawnT() {
 		xT = (int)(Math.random() * 20);
 		yT = (int)(Math.random() * 20);
-		while (xP == xT && yP == yT) {
-			xT = (int)(Math.random() * 20);
-			yT = (int)(Math.random() * 20);
-		}
+		
 	}
-	public double dist() {
-		return Math.sqrt(Math.pow(Math.abs((double) xT - (double) xP), 2) + Math.pow(Math.abs((double) yT - (double) yP), 2));
-	}
+//	public double dist() {
+//		return Math.sqrt(Math.pow((double) xT - (double) xP), 2) + Math.pow((double) yT - (double) yP), 2));
+//	}
 	
 	public void move() {
 		Scanner keyboardInput = new Scanner(System.in);
@@ -53,21 +54,35 @@ public class Game {
 		}
 	}
 	
+	public static int getxP() {
+		return xP;
+	}
+	public static int getyP() {
+		return yP;
+	}
+	public static int getxT() {
+		return xT;
+	}
+	public static int getyT() {
+		return yT;
+	}
 	
 	public void play() {
 		System.out.println("Let us begin...\n");
-		spawnP();
 		spawnT();
-		System.out.println(Player.getName() + " awakes in a mirky swamp, the compass reads " + dist());
+		spawnP();
+//		System.out.println(Player.getName() + " awakes in a mirky swamp, the compass reads " + dist());
+		Navigation.compass();
 		while (xP != xT || yP != yT) {
 			Wisp wi = new Wisp();
 			Lair l = new Lair();
 			Woods w = new Woods();
 			Empty e = new Empty();
 			int n = (int)(Math.random() * 20);
-			if (n == 0) {
-				wi.local();
-			} else if (n >= 1 && n <= 4) {
+//			if (n == 0) {
+//				wi.local();
+//			} 
+			if (n >= 1 && n <= 4) {
 				l.local();
 			} else if (n >= 5 && n <= 8){	
 				w.local();
@@ -78,7 +93,8 @@ public class Game {
 				break;
 			}
 			move();
-			System.out.println("Your compass reads " + dist());
+			Navigation.compass();
+//			System.out.println("Your compass reads " + dist());
 		}
 		if (Player.getHealth() <= 0) {
 			System.out.println("Game Over");
